@@ -6,7 +6,7 @@ python = "3.12"
 claude = "latest"
 uv = "latest"
 node = "24"
-"npm:pnpm" = "latest"
+"npm:pnpm" = "10.33.3"
 
 # === Tasks
 [tasks.venv-create]

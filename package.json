@@ -2,7 +2,7 @@
   "name": "learn-smb-lending-lens",
   "version": "0.1.1",
   "private": true,
-  "packageManager": "pnpm@10.28.0",
+  "packageManager": "pnpm@10.33.3",
   "scripts": {
     "fastapi-dev": "pip3 install -r requirements.txt && python3 -m uvicorn api.index:app --reload --host 127.0.0.1 --port 8000",
     "next-dev": "next dev",
@@ -70,7 +70,7 @@
     "vaul": "^0.9.9"
   },
   "devDependencies": {
-    "@types/node": "^22",
+    "@types/node": "^24",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "postcss": "^8.5",

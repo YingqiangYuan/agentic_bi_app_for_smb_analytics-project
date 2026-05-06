@@ -18,6 +18,39 @@ export default function Hero() {
     { icon: Users, label: "Customer Lifecycle Value" },
   ]
 
+  const techStack = [
+    {
+      name: "AWS Bedrock",
+      href: "https://aws.amazon.com/bedrock/",
+      className:
+        "bg-[#FF9900]/10 text-[#B26500] dark:text-[#FFB84D] border-[#FF9900]/40 hover:bg-[#FF9900]/20",
+    },
+    {
+      name: "Strands-Agents",
+      href: "https://strandsagents.com/",
+      className:
+        "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/40 hover:bg-emerald-500/20",
+    },
+    {
+      name: "Snowflake",
+      href: "https://www.snowflake.com/",
+      className:
+        "bg-[#29B5E8]/10 text-[#1789B8] dark:text-[#29B5E8] border-[#29B5E8]/40 hover:bg-[#29B5E8]/20",
+    },
+    {
+      name: "Next.js",
+      href: "https://nextjs.org/",
+      className:
+        "bg-slate-900/5 text-slate-900 dark:bg-white/10 dark:text-white border-slate-900/30 dark:border-white/40 hover:bg-slate-900/10 dark:hover:bg-white/20",
+    },
+    {
+      name: "AI-SDK",
+      href: "https://ai-sdk.dev/docs/introduction",
+      className:
+        "bg-violet-500/10 text-violet-700 dark:text-violet-400 border-violet-500/40 hover:bg-violet-500/20",
+    },
+  ]
+
   return (
     <section className="min-h-screen flex flex-col justify-center pt-24 pb-12 px-4 sm:px-6 lg:px-8 bg-white dark:bg-[#0A1628]">
       <div className="max-w-4xl mx-auto w-full">
@@ -26,12 +59,12 @@ export default function Hero() {
           className={`transition-all duration-700 delay-100 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-8"}`}
         >
           <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl leading-tight mb-4">
-            <span className="text-[#0A1628] dark:text-white">SMB Lending </span>
-            <span className="text-blue-600 dark:text-blue-400">Lens</span>
+            <span className="text-[#0A1628] dark:text-white">Lend</span>
+            <span className="text-blue-600 dark:text-blue-400">Scope</span>
           </h1>
 
-          <p className="text-xl sm:text-2xl text-slate-500 dark:text-slate-400 mb-4">
-            Fintech Lending Analytics Agent
+          <p className="text-base sm:text-lg text-slate-500 dark:text-slate-400 mb-4 max-w-2xl">
+            Small Business Lending Analytics AI Agent for Business Intelligence
           </p>
 
           <div className="w-20 h-1.5 bg-amber-500 rounded mb-10" />
@@ -63,13 +96,16 @@ export default function Hero() {
 
           {/* Tech Stack Tags */}
           <div className="flex flex-wrap gap-2 mb-10">
-            {["Strands SDK", "AWS Bedrock", "PostgreSQL", "Next.js"].map((tech) => (
-              <span
-                key={tech}
-                className="px-4 py-1.5 text-sm rounded-full bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700"
+            {techStack.map((tech) => (
+              <a
+                key={tech.name}
+                href={tech.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`px-4 py-1.5 text-sm rounded-full border transition-colors ${tech.className}`}
               >
-                {tech}
-              </span>
+                {tech.name}
+              </a>
             ))}
           </div>
         </div>
@@ -101,7 +137,10 @@ export default function Hero() {
           className={`mt-10 transition-all duration-700 delay-700 ${isVisible ? "opacity-100" : "opacity-0"}`}
         >
           <p className="text-sm text-slate-400 dark:text-slate-500">
-            Analyzing Pacific Bridge Lending data: 10 tables, ~52,500 records covering applications, loans, payments, and defaults
+            Analyzing a synthesized SMB lending dataset: 10 tables, ~52,500 records covering applications, loans, payments, and defaults.
+          </p>
+          <p className="mt-2 text-xs text-slate-400 dark:text-slate-500">
+            A personal post-internship reflection — the schema and records are reconstructed from scratch to mirror realistic production patterns. No proprietary or production data is included.
           </p>
         </div>
       </div>

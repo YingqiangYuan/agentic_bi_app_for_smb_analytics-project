@@ -1,7 +1,7 @@
 export const METADATA = {
-  TITLE: "SMB Lending Lens — AI-Powered Fintech Analytics Agent",
+  TITLE: "LendScope — Small Business Lending Analytics AI Agent for Business Intelligence",
   DESCRIPTION: "An AI agent for fintech lending analytics. Query loan portfolios, analyze risk pricing, detect approval leakage, identify early warning signals, and understand customer lifecycle value through natural conversation.",
-  AI_ASSISTANT_NAME: "Lending Lens",
+  AI_ASSISTANT_NAME: "LendScope",
   KEYWORDS: [
     "Fintech",
     "SMB Lending",

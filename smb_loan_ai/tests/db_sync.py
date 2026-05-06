@@ -191,17 +191,11 @@ def sync_sqlite_to_postgres(
                         if col_name in row and row[col_name] is not None:
                             row[col_name] = bool(row[col_name])
 
-            # Build INSERT statement
-            columns = table_info["columns"]
-            placeholders = ", ".join([f":{col}" for col in columns])
-            column_names = ", ".join(columns)
-            insert_sql = sa.text(
-                f"INSERT INTO {table_name} ({column_names}) VALUES ({placeholders})"
-            )
-
-            # Insert rows
-            for row in rows:
-                conn.execute(insert_sql, row)
+            # Bulk insert: passing a list of dicts triggers SQLAlchemy's
+            # insertmanyvalues, which compiles to multi-row INSERT ... VALUES (...), (...), ...
+            # collapsing N round trips into a handful per table.
+            remote_table = remote_metadata.tables[table_name]
+            conn.execute(remote_table.insert(), rows)
 
             log(f"  {table_name}: {len(rows)} rows")
             summary[table_name] = len(rows)

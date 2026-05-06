@@ -3,8 +3,9 @@
 import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Menu, X } from "lucide-react"
+import { Menu, X, Github } from "lucide-react"
 import { NavItem, NavigationProps } from "@/types"
+import { EXTERNAL_LINKS } from "@/lib/constants"
 
 const DEFAULT_NAV_ITEMS: NavItem[] = [
   { label: "Home", href: "/" },
@@ -73,6 +74,17 @@ export default function Navigation({ items = DEFAULT_NAV_ITEMS }: NavigationProp
                 </Link>
               )
             })}
+
+            {/* GitHub Repo */}
+            <a
+              href={EXTERNAL_LINKS.GITHUB_REPO}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#003A5F]/80 dark:text-[#F5F0E1]/80 hover:text-[#003A5F] dark:hover:text-[#F5F0E1] transition-colors cursor-pointer"
+              aria-label="View source on GitHub"
+            >
+              <Github size={20} strokeWidth={1.75} />
+            </a>
           </div>
 
           {/* Mobile Navigation Button */}
@@ -125,6 +137,19 @@ export default function Navigation({ items = DEFAULT_NAV_ITEMS }: NavigationProp
                   </Link>
                 )
               })}
+
+              {/* GitHub Repo */}
+              <a
+                href={EXTERNAL_LINKS.GITHUB_REPO}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 font-medium text-base py-3 px-4 text-[#003A5F]/80 dark:text-[#F5F0E1]/80 hover:text-[#003A5F] dark:hover:text-[#F5F0E1] transition-colors cursor-pointer"
+                onClick={() => setIsMenuOpen(false)}
+                aria-label="View source on GitHub"
+              >
+                <Github size={20} strokeWidth={1.75} />
+                <span>GitHub</span>
+              </a>
             </div>
           </div>
         )}

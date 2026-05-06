@@ -23,3 +23,7 @@ export const ROUTES = {
   HOME: "/",
   CHAT: "/chat",
 } as const;
+
+export const EXTERNAL_LINKS = {
+  GITHUB_REPO: "https://github.com/YingqiangYuan/agentic_bi_app_for_smb_analytics-project",
+} as const;

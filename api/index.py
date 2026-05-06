@@ -147,9 +147,13 @@ async def handle_chat_data(request: Request, protocol: str = Query("data")):
         sys.stdout = old_stdout
 
     # --- Atomically record token spend for this invocation ---
-    # accumulated_usage spans every model call inside the agent loop, so it
-    # captures intermediate tool-using turns, not just the final response.
-    usage = getattr(agent_result.metrics, "accumulated_usage", None) or {}
+    # NOTE: do NOT use metrics.accumulated_usage — strands accumulates that
+    # across the lifetime of the Agent instance (and `one.agent` is cached),
+    # so reading it would re-count every prior request. The per-invocation
+    # total lives on the latest AgentInvocation, which strands appends at the
+    # start of each agent() call.
+    invocations = getattr(agent_result.metrics, "agent_invocations", None) or []
+    usage = invocations[-1].usage if invocations else {}
     input_tokens = int(usage.get("inputTokens", 0) or 0)
     output_tokens = int(usage.get("outputTokens", 0) or 0)
     try:

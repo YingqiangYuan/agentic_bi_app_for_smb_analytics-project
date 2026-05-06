@@ -104,6 +104,7 @@ class Config:
     db_name: str | None = dataclasses.field(default=None)
     dynamodb_table_name_quota: str | None = dataclasses.field(default=None)
     quota_max_invoke_per_month: int = dataclasses.field(default=1000)
+    quota_max_input_token_per_month: int = dataclasses.field(default=50_000_000)
     quota_max_output_token_per_month: int = dataclasses.field(default=10_000_000)
 
     @classmethod

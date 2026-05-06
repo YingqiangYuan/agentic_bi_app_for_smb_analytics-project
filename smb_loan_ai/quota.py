@@ -134,16 +134,20 @@ def check_quota(
     bsm: BotoSesManager,
     app_id: str | None = None,
     max_invoke: int | None = None,
+    max_input_token: int | None = None,
     max_output_token: int | None = None,
 ) -> MonthlyAppQuota:
     """
     Read the current month's counters and raise :class:`QuotaExceededError`
-    if either cap has been reached. Returns the row on success.
+    as soon as ANY of the three caps (invoke / input-token / output-token)
+    is hit. Returns the row on success.
 
     :param bsm: AWS session manager used to bind PynamoDB to the right
         credentials for this call. Required — no implicit default.
     :param max_invoke: Override for per-month invoke cap. Defaults to
         ``Config.quota_max_invoke_per_month``.
+    :param max_input_token: Override for per-month input-token cap.
+        Defaults to ``Config.quota_max_input_token_per_month``.
     :param max_output_token: Override for per-month output-token cap.
         Defaults to ``Config.quota_max_output_token_per_month``.
     """
@@ -151,6 +155,8 @@ def check_quota(
         app_id = get_app_id()
     if max_invoke is None:
         max_invoke = _config.quota_max_invoke_per_month
+    if max_input_token is None:
+        max_input_token = _config.quota_max_input_token_per_month
     if max_output_token is None:
         max_output_token = _config.quota_max_output_token_per_month
     usage = get_usage(bsm, app_id)
@@ -158,6 +164,11 @@ def check_quota(
         raise QuotaExceededError(
             f"Monthly invoke cap reached for {app_id}: "
             f"{int(usage.total_invoke)} >= {max_invoke}"
+        )
+    if int(usage.total_input_token or 0) >= max_input_token:
+        raise QuotaExceededError(
+            f"Monthly input-token cap reached for {app_id}: "
+            f"{int(usage.total_input_token)} >= {max_input_token}"
         )
     if int(usage.total_output_token or 0) >= max_output_token:
         raise QuotaExceededError(

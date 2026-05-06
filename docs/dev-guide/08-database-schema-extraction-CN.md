@@ -6,7 +6,11 @@
 
 ## 数据库来源
 
-本项目使用的是开源的**妇产科病房管理数据库**，数据文件托管在 GitHub Release。
+本项目是一个**金融科技（Fintech）数据分析业务**，聚焦于**小企业贷款（Small Business Loan）** 场景。
+
+数据库中的所有数据来源于真实的小企业贷款业务，**在保持数据分布性质不变的前提下，已经去除所有敏感信息并进行了脱敏混淆**。因此可以放心用于开发、测试与教学，不会泄露任何客户隐私或商业机密。
+
+数据文件托管在 GitHub Release。
 
 **本地 SQLite 数据库路径：** `tmp/data.sqlite`
 
@@ -28,15 +32,36 @@
 
 ---
 
+## 数据库业务模型
+
+数据库名为 `smb_analytics_data`，围绕"贷款全生命周期"建模，主要包含以下表：
+
+| 表名 | 含义 |
+|------|------|
+| `industry` | 行业字典（含基线违约率） |
+| `loan_officer` | 信贷员（贷款专员） |
+| `loan_status` | 贷款状态字典（如审批中、已放款、已逾期等） |
+| `risk_grade` | 风险等级（含信用分区间、利率、隐含违约率） |
+| `customer` | 小企业客户（行业、地区、营收、员工数、信用分等） |
+| `application` | 贷款申请单 |
+| `loan` | 已批准的贷款（金额、利率、期限、当前余额等） |
+| `default_event` | 违约事件（违约日期、损失金额、是否有早期预警等） |
+| `payment` | 实际还款记录 |
+| `repayment_schedule` | 计划还款表 |
+
+完整 Schema 见：`data/database-exploration/database-schema.txt`。
+
+---
+
 ## 为什么 AI Agent 需要了解数据库结构？
 
 AI Agent 的核心能力之一是**根据用户问题自动生成 SQL 查询**。
 
-比如用户问："哪些床位是空的？"
+比如用户问："哪些贷款已经逾期违约了？"
 
 Agent 需要知道：
-- 床位信息在哪个表？（`bed` 表）
-- 哪个字段表示"空"？（`is_occupied = false`）
+- 违约信息在哪个表？（`default_event` 表）
+- 怎么关联到具体客户？（`default_event.loan_id` → `loan.customer_id` → `customer`）
 - 表名和字段名是什么？
 
 **这些信息就是数据库的 Schema（结构）。**
@@ -105,7 +130,7 @@ def engine(self) -> sa.Engine:
         raise NotImplementedError()
 ```
 
-**注意：** 当前代码本地环境也使用远程 PostgreSQL。这是因为我们希望本地和生产环境使用相同的数据。
+**注意：** 当前代码本地环境也使用远程 PostgreSQL。这是因为我们希望本地和生产环境使用相同的脱敏后数据。
 
 ### 懒加载 (@cached_property)
 
@@ -154,8 +179,8 @@ LLM 友好的紧凑字符串
 
 class ColumnInfo(BaseColumnInfo):
     """列信息"""
-    name: str              # 列名，如 "patient_id"
-    fullname: str          # 完整名，如 "patient.patient_id"
+    name: str              # 列名，如 "customer_id"
+    fullname: str          # 完整名，如 "loan.customer_id"
     type: str              # 原始类型，如 "VARCHAR(50)"
     llm_type: LLMTypeEnum  # 简化类型，如 "STR"
     primary_key: bool      # 是否是主键
@@ -219,17 +244,18 @@ SQLAlchemy MetaData.reflect()
 
 **1. sqlalchemy_type_to_llm_type() — 类型简化**
 
-数据库有几十种数据类型（VARCHAR、TEXT、BIGINT、DECIMAL...），但对 AI 来说，只需要知道"这是字符串"还是"这是数字"。
+数据库有几十种数据类型（VARCHAR、TEXT、BIGINT、DECIMAL...），但对 AI 来说，只需要知道"这是字符串"还是"这是金额"。
 
 ```python
 # 简化映射示例
-VARCHAR(50)  → STR   # 字符串
+VARCHAR(50)  → STR   # 字符串（如 business_name）
 TEXT         → STR
-INTEGER      → INT   # 整数
+INTEGER      → INT   # 整数（如 employee_count、credit_score）
 BIGINT       → INT
-DECIMAL(10,2)→ DEC   # 小数
+DECIMAL(10,2)→ DEC   # 金额（如 approved_amount、outstanding_balance）
 TIMESTAMP    → TS    # 时间戳
-BOOLEAN      → BOOL  # 布尔值
+DATE         → DATE  # 日期（如 disbursement_date）
+BOOLEAN      → BOOL  # 布尔值（如 is_repeat_customer）
 ```
 
 **2. new_column_info() — 提取单列信息**
@@ -280,23 +306,31 @@ def new_schema_info(engine, metadata) -> SchemaInfo:
 
 #### 编码格式
 
-这是最终给 AI 看的格式：
+这是最终给 AI 看的格式（节选自真实 schema）：
 
 ```
-SQLite Database healthcare_obstetrics_ward_scheduling(
+sqlite Database smb_analytics_data(
     Schema default(
-        Table patient(
-            patient_id:INT*PK,
-            name:STR*NN,
-            date_of_birth:DATE*NN,
-            blood_type:STR,
-            admission_id:INT*FK->admission.admission_id,
+        Table customer(
+            id:int*PK,
+            business_name:str*NN,
+            tax_id:str*NN,
+            industry_id:int*NN*FK->industry.id,
+            state:str*NN,
+            annual_revenue:dec*NN,
+            employee_count:int*NN,
+            credit_score:int*NN,
+            is_repeat_customer:bool*NN,
         )
-        Table bed(
-            bed_id:INT*PK,
-            bed_label:STR*NN,
-            room_id:INT*NN*FK->room.room_id,
-            is_occupied:BOOL*NN,
+        Table loan(
+            id:int*PK,
+            loan_number:str*NN,
+            application_id:int*NN*FK->application.id,
+            customer_id:int*NN*FK->customer.id,
+            risk_grade_id:int*NN*FK->risk_grade.id,
+            approved_amount:dec*NN,
+            interest_rate:float*NN,
+            outstanding_balance:dec*NN,
         )
     )
 )
@@ -320,9 +354,9 @@ SQLite Database healthcare_obstetrics_ward_scheduling(
 
 ```python
 def encode_column_info(table_info, column_info) -> str:
-    # 例：patient_id:INT*PK
-    # 例：name:STR*NN
-    # 例：room_id:INT*NN*FK->room.room_id
+    # 例：id:int*PK
+    # 例：business_name:str*NN
+    # 例：customer_id:int*NN*FK->customer.id
 
     col_name = column_info.name
     col_type = column_info.llm_type.value
@@ -362,7 +396,7 @@ def database_schema_str(self) -> str:
     # 2. 提取 Schema 信息
     schema_info = new_schema_info(engine=self.engine, metadata=metadata)
     database_info = new_database_info(
-        name="healthcare_obstetrics_ward_scheduling",
+        name="smb_analytics_data",
         db_type=DbTypeEnum.SQLITE,
         schemas=[schema_info],
     )
@@ -389,10 +423,10 @@ def execute_and_print_result(self, sql: str) -> str:
 **为什么用 Markdown 表格？**
 
 ```markdown
-| patient_id | name          | blood_type |
-|------------|---------------|------------|
-| 1          | Julie Parker  | A+         |
-| 2          | Sandra Brown  | O-         |
+| loan_number | business_name      | approved_amount | outstanding_balance |
+|-------------|--------------------|-----------------|--------------------|
+| L-2024-0017 | Northwind Supplies | 250000.00       | 187432.55          |
+| L-2024-0042 | Acme Logistics     | 120000.00       | 98210.10           |
 ```
 
 - **Token 效率高**：比 JSON 格式节省约 24% 的 token
@@ -404,7 +438,7 @@ def execute_and_print_result(self, sql: str) -> str:
 ## 完整流程图
 
 ```
-用户问："哪些床位是空的？"
+用户问："最近一年违约的贷款总共损失了多少？"
            ↓
 AI Agent 调用 get_database_schema 工具
            ↓
@@ -416,8 +450,10 @@ Extractor: new_schema_info() 提取信息
            ↓
 Encoder: encode_database_info() 转成紧凑字符串
            ↓
-AI 看到 Schema，生成 SQL:
-"SELECT * FROM bed WHERE is_occupied = false"
+AI 看到 Schema，生成 SQL：
+"SELECT SUM(loss_amount) AS total_loss
+   FROM default_event
+  WHERE default_date >= DATE('now', '-1 year')"
            ↓
 AI Agent 调用 execute_sql_query 工具
            ↓
@@ -426,7 +462,7 @@ one.execute_and_print_result(sql) 被调用
 执行 SQL，结果格式化为 Markdown 表格
            ↓
 AI 读取结果，生成人类语言回答：
-"目前有 3 张空床位：P-201-A、P-202-B、L-101-A"
+"过去 12 个月共发生 37 起违约，累计损失约 ¥4,820,000。"
 ```
 
 ---
@@ -477,4 +513,4 @@ mise run test-python
 3. **压缩给 AI** → Encoder
 4. **执行查询** → execute_and_print_result
 
-这套系统让 AI Agent 能够"看懂"数据库，然后自主生成并执行 SQL 查询。
+这套系统让 AI Agent 能够"看懂"小企业贷款数据库，然后自主生成并执行 SQL 查询，回答信贷风险、放款表现、客户画像等业务问题。

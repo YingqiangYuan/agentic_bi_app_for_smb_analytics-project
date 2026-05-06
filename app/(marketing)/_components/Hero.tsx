@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { ArrowRight, BarChart3, Shield, AlertTriangle, Users } from "lucide-react"
+import { ArrowRight, BarChart3, Shield, UserX, AlertTriangle, Users } from "lucide-react"
 
 export default function Hero() {
   const [isVisible, setIsVisible] = useState(false)
@@ -12,8 +12,9 @@ export default function Hero() {
   }, [])
 
   const capabilities = [
-    { icon: BarChart3, label: "Risk Pricing Analysis" },
+    { icon: BarChart3, label: "Risk Pricing Alignment" },
     { icon: Shield, label: "Portfolio Concentration" },
+    { icon: UserX, label: "Approval Leakage" },
     { icon: AlertTriangle, label: "Early Warning Signals" },
     { icon: Users, label: "Customer Lifecycle Value" },
   ]
@@ -126,12 +127,13 @@ export default function Hero() {
         >
           <p className="text-lg sm:text-xl text-[#1A1A1A]/85 dark:text-[#F5F0E1]/85 mb-10 leading-relaxed max-w-3xl">
             An AI agent that helps fintech lending teams analyze loan portfolios through
-            natural conversation. Query risk metrics, identify mispriced segments, detect
-            early warning signals, and surface actionable insights from your lending data.
+            natural conversation. Surface risk-pricing misalignment, measure portfolio
+            concentration, spot approval leakage, detect early warning signals, and compare
+            lifecycle value between repeat and first-time borrowers.
           </p>
 
           {/* Capability Cards — embossed paper feel */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-10">
             {capabilities.map((cap, index) => (
               <div
                 key={cap.label}
@@ -195,7 +197,9 @@ export default function Hero() {
           className={`mt-10 transition-all duration-700 delay-700 ${isVisible ? "opacity-100" : "opacity-0"}`}
         >
           <p className="text-sm text-[#7A6F5F] dark:text-[#B8A887]">
-            Analyzing a synthesized SMB lending dataset: 10 tables, ~52,500 records covering applications, loans, payments, and defaults.
+            Analyzing a synthesized SMB lending dataset modeled on a California fintech&apos;s
+            ~2 years of operations: 10 tables, ~119K records spanning customers, applications,
+            loans, repayment schedules, payments, and defaults.
           </p>
           <p className="mt-2 text-xs text-[#7A6F5F]/85 dark:text-[#B8A887]/85">
             A personal post-internship reflection — the schema and records are reconstructed from scratch to mirror realistic production patterns. No proprietary or production data is included.

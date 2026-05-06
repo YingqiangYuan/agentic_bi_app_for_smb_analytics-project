@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { BarChart3, TrendingUp, AlertTriangle, Users } from "lucide-react";
+import { BarChart3, TrendingUp, UserX, AlertTriangle, Users } from "lucide-react";
 import { METADATA } from "@/lib/constants";
 
 export const Overview = () => {
@@ -13,6 +13,11 @@ export const Overview = () => {
       icon: TrendingUp,
       title: "Portfolio Health",
       description: "Industry concentration & exposure",
+    },
+    {
+      icon: UserX,
+      title: "Approval Leakage",
+      description: "Rejected profiles matching successful borrowers",
     },
     {
       icon: AlertTriangle,
@@ -53,8 +58,8 @@ export const Overview = () => {
             </p>
           </div>
 
-          {/* Quick Insight Cards - 2x2 Grid */}
-          <div className="grid grid-cols-2 gap-4">
+          {/* Quick Insight Cards — 5 cards: 2-up on mobile, 3-up on md+ */}
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {quickInsights.map((insight, index) => (
               <motion.div
                 key={insight.title}

@@ -30,8 +30,8 @@ Loans are assigned a **risk_grade** (A through E) based on credit score ranges:
 | A (Prime) | 720-850 | 5.5% | 3.0% |
 | B (Near Prime) | 680-719 | 7.5% | 6.0% |
 | C (Standard) | 640-679 | 9.5% | 6.0% |
-| D (Subprime) | 600-639 | 12.5% | 12.0% |
-| E (Deep Subprime) | <600 | 16.0% | 18.0% |
+| D (Subprime) | 600-639 | 12.5% | 13.0% |
+| E (Deep Subprime) | 300-599 | 16.0% | 18.0% |
 
 **Key Insight**: The `implied_default_rate` is what pricing assumes. Compare this against *actual* default rates to find mispricing.
 
@@ -271,12 +271,14 @@ loan.id → default_event.loan_id (1:1, only defaulted loans)
 
 ## Key Status Codes
 
-**loan_status.status_code values:**
-- Application stage: `PENDING_REVIEW`, `APPROVED`, `REJECTED`
-- Loan stage: `DISBURSED`, `CURRENT`, `PAID_OFF`, `DEFAULTED`
+**loan_status.status_code values (8 total):**
+- Application stage (`status_category = 'Application'`): `PENDING`, `UNDER_REVIEW`, `APPROVED`, `REJECTED`
+- Active stage (`status_category = 'Active'`): `DISBURSED`, `CURRENT`
+- Closed stage (`status_category = 'Closed'`): `DEFAULTED`, `PAID_OFF`
 
 Filter active loans: `status_code IN ('CURRENT', 'DISBURSED')`
 Filter completed loans: `status_code IN ('PAID_OFF', 'DEFAULTED')`
+Filter rejected applications: `status_code = 'REJECTED'` (note: code is `REJECTED`, not `REJECTED_APPLICATION`)
 
 ## SQL Patterns for This Domain
 

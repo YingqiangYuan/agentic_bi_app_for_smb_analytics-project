@@ -23,78 +23,133 @@ export default function Hero() {
       name: "AWS Bedrock",
       href: "https://aws.amazon.com/bedrock/",
       className:
-        "bg-[#FF9900]/10 text-[#B26500] dark:text-[#FFB84D] border-[#FF9900]/40 hover:bg-[#FF9900]/20",
+        "bg-[#FF9900]/12 text-[#B26500] dark:text-[#FFB84D] border-[#FF9900]/45 hover:bg-[#FF9900]/20",
     },
     {
       name: "Strands-Agents",
       href: "https://strandsagents.com/",
       className:
-        "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/40 hover:bg-emerald-500/20",
+        "bg-emerald-600/10 text-emerald-800 dark:text-emerald-300 border-emerald-700/40 hover:bg-emerald-600/15",
     },
     {
       name: "Snowflake",
       href: "https://www.snowflake.com/",
       className:
-        "bg-[#29B5E8]/10 text-[#1789B8] dark:text-[#29B5E8] border-[#29B5E8]/40 hover:bg-[#29B5E8]/20",
+        "bg-[#29B5E8]/12 text-[#147599] dark:text-[#29B5E8] border-[#29B5E8]/45 hover:bg-[#29B5E8]/20",
     },
     {
       name: "Next.js",
       href: "https://nextjs.org/",
       className:
-        "bg-slate-900/5 text-slate-900 dark:bg-white/10 dark:text-white border-slate-900/30 dark:border-white/40 hover:bg-slate-900/10 dark:hover:bg-white/20",
+        "bg-[#003A5F]/8 text-[#0A1F35] dark:bg-[#F5F0E1]/10 dark:text-[#F5F0E1] border-[#0A1F35]/35 dark:border-[#F5F0E1]/35 hover:bg-[#003A5F]/15 dark:hover:bg-[#F5F0E1]/20",
     },
     {
       name: "AI-SDK",
       href: "https://ai-sdk.dev/docs/introduction",
       className:
-        "bg-violet-500/10 text-violet-700 dark:text-violet-400 border-violet-500/40 hover:bg-violet-500/20",
+        "bg-violet-600/10 text-violet-800 dark:text-violet-300 border-violet-700/40 hover:bg-violet-600/15",
     },
   ]
 
   return (
-    <section className="min-h-screen flex flex-col justify-center pt-24 pb-12 px-4 sm:px-6 lg:px-8 bg-white dark:bg-[#0A1628]">
-      <div className="max-w-4xl mx-auto w-full">
+    <section className="relative min-h-screen flex flex-col justify-center pt-24 pb-12 px-4 sm:px-6 lg:px-8 bg-paper-ledger overflow-hidden">
+      {/* Guilloché flourish — decorative, anchored top-right */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-24 -right-32 sm:-right-20 w-[520px] h-[520px] opacity-[0.16] dark:opacity-[0.10]"
+      >
+        <svg
+          viewBox="0 0 400 400"
+          className="w-full h-full text-[#003A5F] dark:text-[#F5F0E1]"
+        >
+          <g fill="none" stroke="currentColor" strokeWidth="0.55">
+            <circle cx="200" cy="200" r="40" />
+            <circle cx="200" cy="200" r="70" />
+            <circle cx="200" cy="200" r="100" />
+            <circle cx="200" cy="200" r="130" />
+            <circle cx="200" cy="200" r="160" />
+            <circle cx="200" cy="200" r="190" />
+            {Array.from({ length: 18 }).map((_, i) => (
+              <g key={i} transform={`rotate(${i * 10} 200 200)`}>
+                <path d="M 30 200 Q 200 130, 370 200 Q 200 270, 30 200" />
+              </g>
+            ))}
+          </g>
+        </svg>
+      </div>
+
+      {/* Bottom-left flourish (smaller, mirrored) */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -bottom-32 -left-28 w-[360px] h-[360px] opacity-[0.10] dark:opacity-[0.07]"
+      >
+        <svg
+          viewBox="0 0 400 400"
+          className="w-full h-full text-[#D03027]"
+        >
+          <g fill="none" stroke="currentColor" strokeWidth="0.5">
+            <circle cx="200" cy="200" r="60" />
+            <circle cx="200" cy="200" r="100" />
+            <circle cx="200" cy="200" r="140" />
+            <circle cx="200" cy="200" r="180" />
+            {Array.from({ length: 14 }).map((_, i) => (
+              <g key={i} transform={`rotate(${i * 12.857} 200 200)`}>
+                <path d="M 60 200 Q 200 140, 340 200 Q 200 260, 60 200" />
+              </g>
+            ))}
+          </g>
+        </svg>
+      </div>
+
+      <div className="max-w-4xl mx-auto w-full relative">
         {/* Title */}
         <div
           className={`transition-all duration-700 delay-100 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-8"}`}
         >
-          <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl leading-tight mb-4">
-            <span className="text-[#0A1628] dark:text-white">Lend</span>
-            <span className="text-blue-600 dark:text-blue-400">Scope</span>
+          <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl leading-[1.05] mb-4 tracking-tight">
+            <span className="text-[#003A5F] dark:text-[#F5F0E1]">Lend</span>
+            <span className="font-serif italic font-medium text-[#D03027] dark:text-[#E8564E]">
+              Scope
+            </span>
           </h1>
 
-          <p className="text-base sm:text-lg text-slate-500 dark:text-slate-400 mb-4 max-w-2xl">
+          <p className="text-base sm:text-lg text-[#7A6F5F] dark:text-[#B8A887] mb-4 max-w-2xl">
             Small Business Lending Analytics AI Agent for Business Intelligence
           </p>
 
-          <div className="w-20 h-1.5 bg-amber-500 rounded mb-10" />
+          <div className="w-20 h-1.5 bg-[#D03027] rounded mb-10" />
         </div>
 
         {/* Description */}
         <div
           className={`transition-all duration-700 delay-300 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
         >
-          <p className="text-lg sm:text-xl text-slate-600 dark:text-slate-300 mb-10 leading-relaxed max-w-3xl">
+          <p className="text-lg sm:text-xl text-[#1A1A1A]/85 dark:text-[#F5F0E1]/85 mb-10 leading-relaxed max-w-3xl">
             An AI agent that helps fintech lending teams analyze loan portfolios through
             natural conversation. Query risk metrics, identify mispriced segments, detect
             early warning signals, and surface actionable insights from your lending data.
           </p>
 
-          {/* Capability Cards - Bluevine Style */}
+          {/* Capability Cards — embossed paper feel */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
             {capabilities.map((cap, index) => (
               <div
                 key={cap.label}
-                className={`p-5 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 transition-all duration-500 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+                className={`stamped relative p-5 rounded-lg bg-[#FAF6E9]/75 dark:bg-[#0F2741]/65 border border-[#003A5F]/15 dark:border-[#F5F0E1]/12 transition-all duration-500 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
                 style={{ transitionDelay: `${400 + index * 100}ms` }}
               >
-                <cap.icon className="w-6 h-6 text-blue-600 dark:text-blue-400 mb-3" />
-                <p className="text-sm font-medium text-[#0A1628] dark:text-white">{cap.label}</p>
+                <cap.icon
+                  className="w-6 h-6 text-[#D03027] dark:text-[#E8564E] mb-3"
+                  strokeWidth={1.75}
+                />
+                <p className="text-sm font-medium text-[#003A5F] dark:text-[#F5F0E1]">
+                  {cap.label}
+                </p>
               </div>
             ))}
           </div>
 
-          {/* Tech Stack Tags */}
+          {/* Tech Stack Tags — stamped pills */}
           <div className="flex flex-wrap gap-2 mb-10">
             {techStack.map((tech) => (
               <a
@@ -102,7 +157,7 @@ export default function Hero() {
                 href={tech.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`px-4 py-1.5 text-sm rounded-full border transition-colors ${tech.className}`}
+                className={`stamped px-4 py-1.5 text-sm rounded-full border transition-colors ${tech.className}`}
               >
                 {tech.name}
               </a>
@@ -110,36 +165,39 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* CTA Button - Bluevine Style */}
+        {/* CTA */}
         <div
           className={`transition-all duration-700 delay-500 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
         >
           <Link
             href="/chat"
-            className="group flex items-center justify-between w-full p-6 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl hover:border-blue-500 dark:hover:border-blue-400 hover:shadow-lg transition-all duration-200 cursor-pointer"
+            className="stamped group flex items-center justify-between w-full p-6 bg-[#FAF6E9]/85 dark:bg-[#0F2741]/75 border border-[#003A5F]/20 dark:border-[#F5F0E1]/15 rounded-2xl hover:border-[#D03027] dark:hover:border-[#E8564E] hover:shadow-[0_10px_30px_rgba(208,48,39,0.14)] transition-all duration-200 cursor-pointer"
           >
             <div>
-              <h3 className="font-display text-2xl sm:text-3xl text-[#0A1628] dark:text-white mb-1">
-                Start Analyzing
+              <h3 className="font-display text-2xl sm:text-3xl text-[#003A5F] dark:text-[#F5F0E1] mb-1">
+                Start{" "}
+                <span className="font-serif italic font-medium text-[#D03027] dark:text-[#E8564E]">
+                  Analyzing
+                </span>
               </h3>
-              <p className="text-slate-500 dark:text-slate-400 text-sm sm:text-base">
+              <p className="text-[#7A6F5F] dark:text-[#B8A887] text-sm sm:text-base">
                 Ask questions about your lending portfolio in plain English
               </p>
             </div>
-            <div className="flex items-center justify-center w-14 h-14 rounded-full bg-slate-100 dark:bg-slate-700 group-hover:bg-blue-600 transition-colors">
-              <ArrowRight className="w-6 h-6 text-slate-400 group-hover:text-white group-hover:translate-x-1 transition-all" />
+            <div className="flex items-center justify-center w-14 h-14 rounded-full bg-[#003A5F]/8 dark:bg-[#F5F0E1]/10 group-hover:bg-[#D03027] transition-colors">
+              <ArrowRight className="w-6 h-6 text-[#003A5F]/70 dark:text-[#F5F0E1]/70 group-hover:text-white group-hover:translate-x-1 transition-all" />
             </div>
           </Link>
         </div>
 
-        {/* Database Info */}
+        {/* Database Info / disclaimer */}
         <div
           className={`mt-10 transition-all duration-700 delay-700 ${isVisible ? "opacity-100" : "opacity-0"}`}
         >
-          <p className="text-sm text-slate-400 dark:text-slate-500">
+          <p className="text-sm text-[#7A6F5F] dark:text-[#B8A887]">
             Analyzing a synthesized SMB lending dataset: 10 tables, ~52,500 records covering applications, loans, payments, and defaults.
           </p>
-          <p className="mt-2 text-xs text-slate-400 dark:text-slate-500">
+          <p className="mt-2 text-xs text-[#7A6F5F]/85 dark:text-[#B8A887]/85">
             A personal post-internship reflection — the schema and records are reconstructed from scratch to mirror realistic production patterns. No proprietary or production data is included.
           </p>
         </div>

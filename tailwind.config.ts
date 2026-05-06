@@ -74,6 +74,7 @@ const config: Config = {
         body: ["var(--font-noto-sans)", "sans-serif"],
         heading: ["var(--font-figtree)", "sans-serif"],
         inter: ["var(--font-inter)", "sans-serif"],
+        serif: ["var(--font-fraunces)", "Georgia", "serif"],
       },
       fontSize: {
         "display-xl": ["clamp(4rem, 15vw, 12rem)", { lineHeight: "0.9", letterSpacing: "-0.02em" }],

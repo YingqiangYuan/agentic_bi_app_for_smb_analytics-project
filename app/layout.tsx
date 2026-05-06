@@ -1,6 +1,6 @@
 import type React from "react"
 import type { Metadata, Viewport } from "next"
-import { Inter, Figtree, Noto_Sans } from "next/font/google"
+import { Inter, Figtree, Noto_Sans, Fraunces } from "next/font/google"
 import { generateSEOMetadata } from "@/lib/seo/generateMetadata"
 import { METADATA } from "@/lib/constants"
 import "./globals.css"
@@ -15,6 +15,12 @@ const notoSans = Noto_Sans({
   subsets: ["latin"],
   variable: "--font-noto-sans",
   weight: ["400", "500", "700"]
+})
+const fraunces = Fraunces({
+  subsets: ["latin"],
+  variable: "--font-fraunces",
+  weight: ["400", "500", "600"],
+  style: ["normal", "italic"],
 })
 
 export const metadata: Metadata = {
@@ -44,7 +50,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${figtree.variable} ${notoSans.variable}`}>
+    <html lang="en" className={`${inter.variable} ${figtree.variable} ${notoSans.variable} ${fraunces.variable}`}>
       <body className={`${notoSans.className} antialiased`}>{children}</body>
     </html>
   )

@@ -14,7 +14,7 @@
 
 ```bash
 # 下载数据库文件（如果已存在则跳过）
-.venv/bin/python scripts/test_download_sqlite_file.py
+.venv/bin/python scripts/01-database-operations/s01_download_sqlite_file.py
 
 # 强制重新下载（覆盖旧文件）
 # 修改 db_helper.py 中的 force=True，或直接删除 tmp/data.sqlite 后重新运行
@@ -22,9 +22,9 @@
 
 **相关文件：**
 - `smb_loan_ai/tests/db_helper.py` — 数据库下载工具函数
-- `scripts/test_download_sqlite_file.py` — 下载脚本入口
+- `scripts/01-database-operations/s01_download_sqlite_file.py` — 下载脚本入口
 
-数据源 URL：`https://github.com/easyscale-academy/public-dataset/releases/download/data/healthcare_obstetrics_ward_scheduling_medium.sqlite`
+数据源 URL：`https://github.com/YingqiangYuan/agentic_bi_app_for_smb_analytics-project/releases/download/0.0.0/agentic_bi_app_for_smb_analytics.sqlite`
 
 ---
 

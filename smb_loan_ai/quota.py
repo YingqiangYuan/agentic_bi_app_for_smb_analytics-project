@@ -35,14 +35,13 @@ from pynamodb_session_manager.api import use_boto_session
 from .config.conf_00_def import Config
 
 
-MAX_INVOKE_PER_MONTH = 1000
-MAX_OUTPUT_TOKENS_PER_MONTH = 10_000_000
-
 APP_ID_PREFIX = "yq_agentic_bi_app_for_smb_analytics"
 
 # Read once at import: PynamoDB needs Meta.table_name fixed at class-definition
 # time. Loading via Config.new() keeps this module independent of the ``one``
 # singleton while still reusing the same env-driven configuration loader.
+# Caps (max invokes / max tokens) live on this same Config so all quota knobs
+# are tunable from one place.
 _config = Config.new()
 
 
@@ -134,8 +133,8 @@ def increment_usage(
 def check_quota(
     bsm: BotoSesManager,
     app_id: str | None = None,
-    max_invoke: int = MAX_INVOKE_PER_MONTH,
-    max_output_tokens: int = MAX_OUTPUT_TOKENS_PER_MONTH,
+    max_invoke: int | None = None,
+    max_output_token: int | None = None,
 ) -> MonthlyAppQuota:
     """
     Read the current month's counters and raise :class:`QuotaExceededError`
@@ -143,18 +142,26 @@ def check_quota(
 
     :param bsm: AWS session manager used to bind PynamoDB to the right
         credentials for this call. Required — no implicit default.
+    :param max_invoke: Override for per-month invoke cap. Defaults to
+        ``Config.quota_max_invoke_per_month``.
+    :param max_output_token: Override for per-month output-token cap.
+        Defaults to ``Config.quota_max_output_token_per_month``.
     """
     if app_id is None:
         app_id = get_app_id()
+    if max_invoke is None:
+        max_invoke = _config.quota_max_invoke_per_month
+    if max_output_token is None:
+        max_output_token = _config.quota_max_output_token_per_month
     usage = get_usage(bsm, app_id)
     if int(usage.total_invoke or 0) >= max_invoke:
         raise QuotaExceededError(
             f"Monthly invoke cap reached for {app_id}: "
             f"{int(usage.total_invoke)} >= {max_invoke}"
         )
-    if int(usage.total_output_token or 0) >= max_output_tokens:
+    if int(usage.total_output_token or 0) >= max_output_token:
         raise QuotaExceededError(
             f"Monthly output-token cap reached for {app_id}: "
-            f"{int(usage.total_output_token)} >= {max_output_tokens}"
+            f"{int(usage.total_output_token)} >= {max_output_token}"
         )
     return usage

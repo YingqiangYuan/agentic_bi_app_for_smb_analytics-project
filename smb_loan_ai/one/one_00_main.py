@@ -4,11 +4,12 @@
 
 from .one_01_config import ConfigMixin
 from .one_02_db import DbMixin
-
+from .one_03_boto3 import Boto3Mixin
 
 class One(
     ConfigMixin,
     DbMixin,
+    Boto3Mixin,
 ):
     """Central class that combines all mixin functionalities for the application."""
 

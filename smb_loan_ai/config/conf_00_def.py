@@ -102,6 +102,7 @@ class Config:
     db_user: str | None = dataclasses.field(default=None)
     db_pass: str | None = dataclasses.field(default=None)
     db_name: str | None = dataclasses.field(default=None)
+    dynamodb_table_name_quota: str | None = dataclasses.field(default=None)
 
     @classmethod
     def new_in_local_runtime(cls):
@@ -119,6 +120,7 @@ class Config:
             db_user=os.environ["DB_USER"],
             db_pass=os.environ["DB_PASS"],
             db_name=os.environ["DB_NAME"],
+            dynamodb_table_name_quota=os.environ["DYNAMODB_TABLE_NAME_QUOTA"],
         )
 
     @classmethod
@@ -135,6 +137,7 @@ class Config:
             db_user=os.environ["DB_USER"],
             db_pass=os.environ["DB_PASS"],
             db_name=os.environ["DB_NAME"],
+            dynamodb_table_name_quota=os.environ["DYNAMODB_TABLE_NAME_QUOTA"],
         )
 
     @classmethod

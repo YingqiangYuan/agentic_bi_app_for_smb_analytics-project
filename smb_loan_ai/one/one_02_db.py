@@ -13,6 +13,8 @@ from ..constants import DbTypeEnum
 from ..db_schema.api import new_schema_info
 from ..db_schema.api import new_database_info
 from ..db_schema.api import encode_database_info
+from ..sql_utils import DEFAULT_MAX_ROWS
+from ..sql_utils import DEFAULT_MAX_CHARS
 from ..sql_utils import execute_and_print_result
 
 if T.TYPE_CHECKING:  # pragma: no cover
@@ -73,9 +75,16 @@ class DbMixin:
         database_info_str = encode_database_info(database_info=database_info)
         return database_info_str
 
-    def execute_and_print_result(self: "One", sql: str) -> str:
+    def execute_and_print_result(
+        self: "One",
+        sql: str,
+        max_rows: int = DEFAULT_MAX_ROWS,
+        max_chars: int = DEFAULT_MAX_CHARS,
+    ) -> str:
         """Execute a SELECT query and return results as a Markdown table."""
         return execute_and_print_result(
             engine=self.engine,
             sql=sql,
+            max_rows=max_rows,
+            max_chars=max_chars,
         )

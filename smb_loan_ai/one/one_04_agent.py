@@ -96,8 +96,22 @@ class AgentMixin:
         Note:
             Only SELECT queries are supported. Use get_database_schema first to
             understand available tables and columns before constructing queries.
+            Results are capped at 100 rows / 15000 characters; widen WHERE clauses
+            or aggregate instead of asking for raw rows when more data is needed.
         """
-        return self.execute_and_print_result(sql=sql)
+        agent_max_rows = 100
+        agent_max_chars = 15000
+        text = self.execute_and_print_result(
+            sql=sql,
+            max_rows=agent_max_rows,
+            max_chars=agent_max_chars,
+        )
+        if len(text) > agent_max_chars:
+            text = (
+                text[:agent_max_chars]
+                + f"\n\n_Note: tool output hard-capped at {agent_max_chars} characters._"
+            )
+        return text
 
 
     @tool(

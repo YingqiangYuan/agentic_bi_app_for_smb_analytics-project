@@ -105,7 +105,7 @@ export function Chat() {
   }, [messages.length]);
 
   return (
-    <div className="flex flex-col min-w-0 h-[calc(100dvh-64px)] bg-slate-50 dark:bg-[#0A1628]">
+    <div className="flex flex-col min-w-0 h-[calc(100dvh-64px)] bg-paper-ledger">
       <div
         ref={messagesContainerRef}
         className="flex flex-col min-w-0 gap-4 flex-1 overflow-y-scroll pt-4 px-4"
@@ -116,22 +116,22 @@ export function Chat() {
         {/* Context Banner */}
         {messages.length > 0 && isContextBannerVisible && (
           <div className="max-w-3xl mx-auto w-full">
-            <div className="border border-slate-200 dark:border-slate-700 p-4 bg-white dark:bg-slate-900 rounded-xl">
+            <div className="stamped border border-[#003A5F]/15 dark:border-[#F5F0E1]/12 p-4 bg-[#FAF6E9]/85 dark:bg-[#0F2741]/75 rounded-xl">
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-start gap-3 flex-1">
-                  <div className="w-10 h-10 bg-blue-600 flex items-center justify-center shrink-0 rounded-lg">
-                    <span className="font-display text-sm text-white">AI</span>
+                  <div className="w-10 h-10 bg-[#003A5F] dark:bg-[#0A1F35] flex items-center justify-center shrink-0 rounded-lg border border-[#003A5F]/40 dark:border-[#F5F0E1]/15">
+                    <span className="font-serif italic text-sm text-[#F5F0E1]">AI</span>
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-display text-sm text-[#0A1628] dark:text-white">{METADATA.AI_ASSISTANT_NAME}</h3>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                      I'm here to help you with <span className="font-semibold text-blue-600 dark:text-blue-400">SMB lending analytics</span> and portfolio insights.
+                    <h3 className="font-display text-sm text-[#003A5F] dark:text-[#F5F0E1]">{METADATA.AI_ASSISTANT_NAME}</h3>
+                    <p className="text-xs text-[#7A6F5F] dark:text-[#B8A887] mt-1">
+                      I'm here to help you with <span className="font-serif italic font-medium text-[#D03027] dark:text-[#E8564E]">SMB lending analytics</span> and portfolio insights.
                     </p>
                   </div>
                 </div>
                 <button
                   onClick={() => setIsContextBannerVisible(false)}
-                  className="text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors shrink-0 cursor-pointer"
+                  className="text-[#7A6F5F]/70 hover:text-[#003A5F] dark:text-[#B8A887]/70 dark:hover:text-[#F5F0E1] transition-colors shrink-0 cursor-pointer"
                   aria-label="Close"
                 >
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -165,7 +165,7 @@ export function Chat() {
         />
       </div>
 
-      <div className="p-4 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-700">
+      <div className="p-4 bg-[#FAF6E9]/80 dark:bg-[#0A1F35]/80 backdrop-blur-sm border-t border-[#003A5F]/15 dark:border-[#F5F0E1]/10">
         <form className="flex mx-auto gap-2 w-full md:max-w-3xl">
           <MultimodalInput
             chatId={chatId}

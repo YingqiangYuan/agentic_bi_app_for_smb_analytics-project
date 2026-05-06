@@ -80,17 +80,17 @@ export const PreviewMessage = ({
       >
         {/* AI Assistant Avatar - Left side */}
         {message.role === "assistant" && (
-          <div className="w-8 h-8 flex items-center justify-center bg-blue-600 shrink-0 rounded-lg">
-            <span className="font-display text-xs text-white">AI</span>
+          <div className="stamped w-8 h-8 flex items-center justify-center bg-[#003A5F] dark:bg-[#0A1F35] border border-[#003A5F]/40 dark:border-[#F5F0E1]/15 shrink-0 rounded-lg">
+            <span className="font-serif italic text-xs text-[#F5F0E1]">AI</span>
           </div>
         )}
 
         <div
           className={cn(
-            "flex flex-col gap-2 max-w-[85%] sm:max-w-[75%] p-4 rounded-xl",
+            "stamped flex flex-col gap-2 max-w-[85%] sm:max-w-[75%] p-4 rounded-xl border",
             message.role === "user"
-              ? "bg-[#0A1628] text-white"
-              : "bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700"
+              ? "bg-[#003A5F] dark:bg-[#0A1F35] border-[#003A5F]/40 dark:border-[#F5F0E1]/15 text-[#F5F0E1]"
+              : "bg-[#FAF6E9]/85 dark:bg-[#0F2741]/75 border-[#003A5F]/15 dark:border-[#F5F0E1]/12"
           )}
         >
           {/* AI SDK v5: Use parts instead of content */}
@@ -110,8 +110,8 @@ export const PreviewMessage = ({
                       key={index}
                       className={cn(
                         message.role === "assistant"
-                          ? "text-[#0A1628] dark:text-slate-100"
-                          : "text-white"
+                          ? "text-[#1A1A1A]/90 dark:text-[#F5F0E1]/90"
+                          : "text-[#F5F0E1]"
                       )}
                     >
                       <Markdown
@@ -136,7 +136,7 @@ export const PreviewMessage = ({
 
         {/* User Avatar - Right side */}
         {message.role === "user" && (
-          <div className="w-8 h-8 overflow-hidden border border-slate-200 dark:border-slate-700 shrink-0 rounded-lg">
+          <div className="stamped w-8 h-8 overflow-hidden border border-[#003A5F]/30 dark:border-[#F5F0E1]/15 shrink-0 rounded-lg">
             <Image
               src={CDN_ASSETS.PROFILE_PHOTO}
               alt="User Profile"
@@ -162,14 +162,14 @@ export const ThinkingMessage = () => {
       data-role={role}
     >
       <div className="flex gap-3 w-full justify-start">
-        <div className="w-8 h-8 flex items-center justify-center bg-blue-600 shrink-0 rounded-lg">
-          <span className="font-display text-xs text-white">AI</span>
+        <div className="stamped w-8 h-8 flex items-center justify-center bg-[#003A5F] dark:bg-[#0A1F35] border border-[#003A5F]/40 dark:border-[#F5F0E1]/15 shrink-0 rounded-lg">
+          <span className="font-serif italic text-xs text-[#F5F0E1]">AI</span>
         </div>
 
-        <div className="p-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl">
-          <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400">
-            <span className="inline-block w-2 h-2 bg-blue-600 rounded-full animate-pulse" />
-            <span className="font-display text-sm">Thinking...</span>
+        <div className="stamped p-4 bg-[#FAF6E9]/85 dark:bg-[#0F2741]/75 border border-[#003A5F]/15 dark:border-[#F5F0E1]/12 rounded-xl">
+          <div className="flex items-center gap-2 text-[#7A6F5F] dark:text-[#B8A887]">
+            <span className="inline-block w-2 h-2 bg-[#D03027] dark:bg-[#E8564E] rounded-full animate-pulse" />
+            <span className="font-serif italic text-sm">Thinking...</span>
           </div>
         </div>
       </div>

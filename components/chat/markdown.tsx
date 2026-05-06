@@ -31,7 +31,7 @@ export const Markdown = ({ children, variant = 'chat', onQuestionClick }: Markdo
               return (
                 <button
                   onClick={() => onQuestionClick?.(question)}
-                  className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 underline font-medium cursor-pointer transition-colors"
+                  className="text-[#D03027] dark:text-[#E8564E] hover:text-[#A8261F] dark:hover:text-[#D03027] underline font-medium cursor-pointer transition-colors"
                 >
                   {children}
                 </button>
@@ -42,7 +42,7 @@ export const Markdown = ({ children, variant = 'chat', onQuestionClick }: Markdo
                 href={href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 underline"
+                className="text-[#D03027] dark:text-[#E8564E] hover:text-[#A8261F] dark:hover:text-[#D03027] underline"
               >
                 {children}
               </a>
@@ -53,53 +53,53 @@ export const Markdown = ({ children, variant = 'chat', onQuestionClick }: Markdo
             const isInline = !className;
             if (isInline) {
               return (
-                <code className="bg-slate-100 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 px-1.5 py-0.5 rounded text-sm font-mono text-[#0A1628] dark:text-slate-100">
+                <code className="bg-[#F5F0E1]/60 dark:bg-[#0A1F35]/60 border border-[#003A5F]/15 dark:border-[#F5F0E1]/12 px-1.5 py-0.5 rounded text-sm font-mono text-[#003A5F] dark:text-[#F5F0E1]">
                   {children}
                 </code>
               );
             }
             return (
-              <code className={cn("block bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-3 rounded-lg my-3 overflow-x-auto text-sm font-mono text-[#0A1628] dark:text-slate-100", className)}>
+              <code className={cn("block bg-[#F5F0E1]/60 dark:bg-[#0A1F35]/60 border border-[#003A5F]/15 dark:border-[#F5F0E1]/12 p-3 rounded-lg my-3 overflow-x-auto text-sm font-mono text-[#003A5F] dark:text-[#F5F0E1]", className)}>
                 {children}
               </code>
             );
           },
           pre: ({ children }) => (
-            <pre className="bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-4 rounded-lg my-3 overflow-x-auto">
+            <pre className="bg-[#F5F0E1]/60 dark:bg-[#0A1F35]/60 border border-[#003A5F]/15 dark:border-[#F5F0E1]/12 p-4 rounded-lg my-3 overflow-x-auto">
               {children}
             </pre>
           ),
           ul: ({ children }) => <ul className="list-disc pl-6 mb-3 space-y-1">{children}</ul>,
           ol: ({ children }) => <ol className="list-decimal pl-6 mb-3 space-y-1">{children}</ol>,
           li: ({ children }) => <li className="leading-relaxed">{children}</li>,
-          strong: ({ children }) => <strong className="font-semibold text-blue-600 dark:text-blue-400">{children}</strong>,
-          em: ({ children }) => <em className="italic text-slate-600 dark:text-slate-300">{children}</em>,
+          strong: ({ children }) => <strong className="font-semibold text-[#003A5F] dark:text-[#F5F0E1]">{children}</strong>,
+          em: ({ children }) => <em className="font-serif italic text-[#7A6F5F] dark:text-[#B8A887]">{children}</em>,
           blockquote: ({ children }) => (
-            <blockquote className="border-l-4 border-blue-500 dark:border-blue-400 pl-4 my-3 text-slate-600 dark:text-slate-300 italic bg-slate-50 dark:bg-slate-800/50 py-2 rounded-r">
+            <blockquote className="border-l-4 border-[#D03027] dark:border-[#E8564E] pl-4 my-3 text-[#7A6F5F] dark:text-[#B8A887] italic bg-[#F5F0E1]/50 dark:bg-[#0A1F35]/50 py-2 rounded-r">
               {children}
             </blockquote>
           ),
-          h1: ({ children }) => <h1 className="text-2xl font-bold mb-3 mt-4">{children}</h1>,
-          h2: ({ children }) => <h2 className="text-xl font-bold mb-3 mt-4">{children}</h2>,
-          h3: ({ children }) => <h3 className="text-lg font-semibold mb-2 mt-3">{children}</h3>,
-          h4: ({ children }) => <h4 className="text-base font-semibold mb-2 mt-3">{children}</h4>,
+          h1: ({ children }) => <h1 className="font-display text-2xl font-semibold mb-3 mt-4 text-[#003A5F] dark:text-[#F5F0E1]">{children}</h1>,
+          h2: ({ children }) => <h2 className="font-display text-xl font-semibold mb-3 mt-4 text-[#003A5F] dark:text-[#F5F0E1]">{children}</h2>,
+          h3: ({ children }) => <h3 className="font-display text-lg font-semibold mb-2 mt-3 text-[#003A5F] dark:text-[#F5F0E1]">{children}</h3>,
+          h4: ({ children }) => <h4 className="font-display text-base font-semibold mb-2 mt-3 text-[#003A5F] dark:text-[#F5F0E1]">{children}</h4>,
           table: ({ children }) => (
             <div className="overflow-x-auto my-3">
-              <table className="min-w-full border border-slate-200 dark:border-slate-700 rounded-lg">
+              <table className="min-w-full border border-[#003A5F]/15 dark:border-[#F5F0E1]/12 rounded-lg">
                 {children}
               </table>
             </div>
           ),
           thead: ({ children }) => (
-            <thead className="bg-slate-100 dark:bg-slate-800">{children}</thead>
+            <thead className="bg-[#F5F0E1]/60 dark:bg-[#0A1F35]/60">{children}</thead>
           ),
           th: ({ children }) => (
-            <th className="px-4 py-2 text-left text-sm font-semibold border-b border-slate-200 dark:border-slate-700">
+            <th className="px-4 py-2 text-left text-sm font-display font-semibold text-[#003A5F] dark:text-[#F5F0E1] border-b border-[#003A5F]/15 dark:border-[#F5F0E1]/12">
               {children}
             </th>
           ),
           td: ({ children }) => (
-            <td className="px-4 py-2 text-sm border-b border-slate-200 dark:border-slate-700">
+            <td className="px-4 py-2 text-sm border-b border-[#003A5F]/15 dark:border-[#F5F0E1]/12">
               {children}
             </td>
           ),

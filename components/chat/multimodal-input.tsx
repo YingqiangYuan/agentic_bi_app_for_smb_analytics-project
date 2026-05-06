@@ -106,8 +106,8 @@ export function MultimodalInput({
       {/* Suggested Questions */}
       {messages.length === 0 && (
         <div className="flex flex-col gap-3">
-          <div className="border border-slate-200 dark:border-slate-700 p-3 bg-white dark:bg-slate-900 rounded-xl">
-            <p className="font-display text-sm text-slate-500 dark:text-slate-400 text-center">
+          <div className="stamped border border-[#003A5F]/15 dark:border-[#F5F0E1]/12 p-3 bg-[#FAF6E9]/85 dark:bg-[#0F2741]/75 rounded-xl">
+            <p className="font-serif italic text-sm text-[#7A6F5F] dark:text-[#B8A887] text-center">
               Ask me directly or click a suggestion
             </p>
           </div>
@@ -130,12 +130,12 @@ export function MultimodalInput({
                         content: suggestedAction.action,
                       });
                     }}
-                    className="group text-left border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-blue-400 dark:hover:border-blue-500 px-4 py-3 text-sm flex-1 gap-1 sm:flex-col w-full h-auto justify-start items-start transition-all cursor-pointer rounded-xl"
+                    className="stamped group text-left border border-[#003A5F]/15 dark:border-[#F5F0E1]/12 bg-[#FAF6E9]/85 dark:bg-[#0F2741]/75 hover:bg-[#FAF6E9] dark:hover:bg-[#0F2741] hover:border-[#D03027] dark:hover:border-[#E8564E] px-4 py-3 text-sm flex-1 gap-1 sm:flex-col w-full h-auto justify-start items-start transition-all cursor-pointer rounded-xl"
                   >
-                    <span className="font-display text-sm text-[#0A1628] dark:text-white">
+                    <span className="font-display text-sm text-[#003A5F] dark:text-[#F5F0E1]">
                       {suggestedAction.title}
                     </span>
-                    <span className="text-xs text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300 leading-snug transition-colors">
+                    <span className="font-serif italic text-xs text-[#D03027] dark:text-[#E8564E] group-hover:text-[#A8261F] dark:group-hover:text-[#D03027] leading-snug transition-colors">
                       {suggestedAction.label}
                     </span>
                   </Button>
@@ -155,9 +155,9 @@ export function MultimodalInput({
           onChange={handleInput}
           className={cn(
             "min-h-[24px] max-h-[calc(75dvh)] overflow-hidden resize-none !text-base",
-            "bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl",
-            "focus:border-blue-500 focus:ring-blue-500 focus:ring-2",
-            "text-[#0A1628] dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500",
+            "bg-[#FAF6E9]/85 dark:bg-[#0F2741]/75 border border-[#003A5F]/20 dark:border-[#F5F0E1]/12 rounded-xl",
+            "focus:border-[#D03027] dark:focus:border-[#E8564E] focus:ring-[#D03027]/30 dark:focus:ring-[#E8564E]/30 focus:ring-2",
+            "text-[#1A1A1A] dark:text-[#F5F0E1] placeholder:text-[#7A6F5F]/70 dark:placeholder:text-[#B8A887]/70",
             "pr-12",
             className,
           )}
@@ -178,7 +178,7 @@ export function MultimodalInput({
 
         {isLoading ? (
           <Button
-            className="p-2 h-fit absolute bottom-2 right-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 cursor-pointer rounded-lg"
+            className="stamped p-2 h-fit absolute bottom-2 right-2 bg-[#FAF6E9] dark:bg-[#0F2741] border border-[#003A5F]/20 dark:border-[#F5F0E1]/15 hover:bg-[#ECE4CF] dark:hover:bg-[#0A1F35] text-[#003A5F] dark:text-[#F5F0E1] cursor-pointer rounded-lg"
             onClick={(event) => {
               event.preventDefault();
               stop();
@@ -189,7 +189,7 @@ export function MultimodalInput({
           </Button>
         ) : (
           <Button
-            className="p-2 h-fit absolute bottom-2 right-2 bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all cursor-pointer rounded-lg"
+            className="stamped p-2 h-fit absolute bottom-2 right-2 bg-[#D03027] hover:bg-[#A8261F] dark:bg-[#E8564E] dark:hover:bg-[#D03027] text-[#F5F0E1] disabled:opacity-50 disabled:cursor-not-allowed transition-all cursor-pointer rounded-lg"
             onClick={(event) => {
               event.preventDefault();
               submitForm();

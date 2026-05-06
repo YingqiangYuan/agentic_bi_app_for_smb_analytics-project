@@ -64,7 +64,7 @@ class DbMixin:
             schema_name=None,
         )
         database_info = new_database_info(
-            name="fintech_smb_lending_pipeline_medium_data",
+            name="smb_analytics_data",
             db_type=DbTypeEnum.SQLITE,
             schemas=[
                 schema_info,

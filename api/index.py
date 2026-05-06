@@ -30,6 +30,9 @@ from smb_loan_ai.ai_sdk_adapter import request_body_to_agent_history
 from smb_loan_ai.one.api import one  # Main singleton with agent
 from smb_loan_ai.agent_debugger import extract_text_from_messages
 from smb_loan_ai.agent_debugger import parse_response_text
+from smb_loan_ai.quota import check_quota
+from smb_loan_ai.quota import increment_usage
+from smb_loan_ai.quota import QuotaExceededError
 # fmt: on
 
 # Add project root to sys.path for module imports
@@ -98,6 +101,26 @@ async def handle_chat_data(request: Request, protocol: str = Query("data")):
         response.headers["Connection"] = "keep-alive"
         return response
 
+    # --- Enforce monthly quota before spending tokens ---
+    try:
+        check_quota(one.bsm)
+    except QuotaExceededError as e:
+        debug(f"[Quota] blocked: {e}")
+        response = StreamingResponse(
+            ai_sdk_message_with_reasoning_generator(
+                reasoning_text="",
+                output_text=(
+                    "This app has reached its monthly usage limit. "
+                    "Please try again next month."
+                ),
+            ),
+            media_type="text/event-stream",
+        )
+        response.headers["x-vercel-ai-ui-message-stream"] = "v1"
+        response.headers["Cache-Control"] = "no-cache"
+        response.headers["Connection"] = "keep-alive"
+        return response
+
     # --- Get the agent and restore conversation history ---
     agent = one.agent
 
@@ -119,9 +142,24 @@ async def handle_chat_data(request: Request, protocol: str = Query("data")):
     old_stdout = sys.stdout
     sys.stdout = io.StringIO()
     try:
-        agent(last_user_message)
+        agent_result = agent(last_user_message)
     finally:
         sys.stdout = old_stdout
+
+    # --- Atomically record token spend for this invocation ---
+    # accumulated_usage spans every model call inside the agent loop, so it
+    # captures intermediate tool-using turns, not just the final response.
+    usage = getattr(agent_result.metrics, "accumulated_usage", None) or {}
+    input_tokens = int(usage.get("inputTokens", 0) or 0)
+    output_tokens = int(usage.get("outputTokens", 0) or 0)
+    try:
+        increment_usage(
+            one.bsm,
+            input_tokens=input_tokens,
+            output_tokens=output_tokens,
+        )
+    except Exception as e:  # pragma: no cover - never let metering break a reply
+        debug(f"[Quota] increment failed: {e}")
 
     # --- Extract thinking and answer from agent response ---
     full_text = extract_text_from_messages(agent.messages, msg_count_before)

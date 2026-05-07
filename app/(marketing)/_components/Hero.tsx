@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { ArrowRight, BarChart3, Shield, UserX, AlertTriangle, Users } from "lucide-react"
+import { ArrowRight, ArrowUpRight, BarChart3, Shield, UserX, AlertTriangle, Users } from "lucide-react"
+import { EXTERNAL_LINKS } from "@/lib/constants"
 
 export default function Hero() {
   const [isVisible, setIsVisible] = useState(false)
@@ -17,6 +18,37 @@ export default function Hero() {
     { icon: UserX, label: "Approval Leakage" },
     { icon: AlertTriangle, label: "Early Warning Signals" },
     { icon: Users, label: "Customer Lifecycle Value" },
+  ]
+
+  const sourceLinks = [
+    {
+      emoji: "🔍",
+      title: "Schema Extractor",
+      description: "How the agent learns the database structure",
+      href: EXTERNAL_LINKS.SOURCE_DB_SCHEMA_EXTRACTOR,
+      path: "smb_loan_ai/db_schema/extractor.py",
+    },
+    {
+      emoji: "📜",
+      title: "Agent System Prompt",
+      description: "The instruction set that drives reasoning & tool use",
+      href: EXTERNAL_LINKS.SOURCE_AGENT_SYSTEM_PROMPT,
+      path: "smb_loan_ai/prompts/bi-agent-system-prompt.md",
+    },
+    {
+      emoji: "🛠️",
+      title: "Agent Definition & Tools",
+      description: "@tool methods — run SQL, fetch schema, write debug reports",
+      href: EXTERNAL_LINKS.SOURCE_AGENT_DEFINITION,
+      path: "smb_loan_ai/one/one_04_agent.py",
+    },
+    {
+      emoji: "🔌",
+      title: "UI Backend",
+      description: "FastAPI route streaming Bedrock responses to the chat UI",
+      href: EXTERNAL_LINKS.SOURCE_UI_BACKEND,
+      path: "api/index.py",
+    },
   ]
 
   const techStack = [
@@ -192,9 +224,67 @@ export default function Hero() {
           </Link>
         </div>
 
+        {/* Under the Hood — portfolio code links */}
+        <div
+          className={`mt-16 transition-all duration-700 delay-[600ms] ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+        >
+          <div className="mb-6">
+            <h3 className="font-display text-2xl sm:text-3xl tracking-tight mb-2">
+              <span className="text-[#003A5F] dark:text-[#F5F0E1]">Under the </span>
+              <span className="font-serif italic font-medium text-[#D03027] dark:text-[#E8564E]">
+                Hood
+              </span>
+            </h3>
+            <div className="w-12 h-1 bg-[#D03027] dark:bg-[#E8564E] rounded mb-3" />
+            <p className="text-sm sm:text-base text-[#7A6F5F] dark:text-[#B8A887] max-w-2xl">
+              Here&apos;s how the agent actually works under the hood.
+              Each link points to the production source on GitHub.
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-3">
+            {sourceLinks.map((link, index) => (
+              <a
+                key={link.href}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`stamped group flex items-center gap-4 p-4 sm:p-5 bg-[#FAF6E9]/85 dark:bg-[#0F2741]/75 border border-[#003A5F]/15 dark:border-[#F5F0E1]/12 rounded-xl hover:border-[#D03027] dark:hover:border-[#E8564E] hover:shadow-[0_6px_20px_rgba(208,48,39,0.12)] transition-all duration-200 cursor-pointer ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+                style={{ transitionDelay: `${700 + index * 80}ms` }}
+              >
+                {/* Emoji badge */}
+                <div className="stamped flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 shrink-0 rounded-lg bg-[#F5F0E1] dark:bg-[#0A1F35] border border-[#003A5F]/20 dark:border-[#F5F0E1]/15 text-2xl sm:text-3xl">
+                  <span aria-hidden>{link.emoji}</span>
+                </div>
+
+                {/* Title + description + path */}
+                <div className="flex-1 min-w-0">
+                  <h4 className="font-display text-base sm:text-lg font-semibold text-[#003A5F] dark:text-[#F5F0E1] leading-tight">
+                    {link.title}
+                  </h4>
+                  <p className="text-sm text-[#7A6F5F] dark:text-[#B8A887] mt-0.5 leading-snug">
+                    {link.description}
+                  </p>
+                  <p className="font-mono text-[11px] sm:text-xs text-[#7A6F5F]/75 dark:text-[#B8A887]/70 mt-1 truncate">
+                    {link.path}
+                  </p>
+                </div>
+
+                {/* Arrow indicator */}
+                <div className="flex items-center justify-center w-9 h-9 shrink-0 rounded-full bg-[#003A5F]/8 dark:bg-[#F5F0E1]/10 group-hover:bg-[#D03027] dark:group-hover:bg-[#E8564E] transition-colors">
+                  <ArrowUpRight
+                    className="w-4 h-4 text-[#003A5F]/70 dark:text-[#F5F0E1]/70 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all"
+                    strokeWidth={2}
+                  />
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+
         {/* Database Info / disclaimer */}
         <div
-          className={`mt-10 transition-all duration-700 delay-700 ${isVisible ? "opacity-100" : "opacity-0"}`}
+          className={`mt-10 transition-all duration-700 delay-[1100ms] ${isVisible ? "opacity-100" : "opacity-0"}`}
         >
           <p className="text-sm text-[#7A6F5F] dark:text-[#B8A887]">
             Analyzing a synthesized SMB lending dataset modeled on a California fintech&apos;s

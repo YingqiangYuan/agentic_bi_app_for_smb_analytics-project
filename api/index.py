@@ -110,8 +110,11 @@ async def handle_chat_data(request: Request, protocol: str = Query("data")):
             ai_sdk_message_with_reasoning_generator(
                 reasoning_text="",
                 output_text=(
-                    "This app has reached its monthly usage limit. "
-                    "Please try again next month."
+                    "Heads up — this is a personal demo, and I've set a "
+                    "monthly token budget on it to keep my cloud bill from "
+                    "going wild. We've hit that cap for this billing cycle, "
+                    "so the chat is paused until the budget resets next "
+                    "month. Thanks for trying it out!"
                 ),
             ),
             media_type="text/event-stream",

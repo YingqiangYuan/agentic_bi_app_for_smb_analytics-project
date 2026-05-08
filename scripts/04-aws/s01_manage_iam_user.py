@@ -31,6 +31,7 @@ from smb_loan_ai.one.api import one
 # Hardcoded — this script manages exactly one user.
 IAM_USER_NAME = "yq_agentic_bi_app_for_smb_analytics"
 INLINE_POLICY_NAME = "dynamodb_quota_table_access"
+INLINE_POLICY_NAME_BEDROCK = "bedrock_invoke_model_access"
 
 ENV_PATH = Path(__file__).resolve().parent / ".env"
 GIT_REPO_DIR = Path(__file__).resolve().parents[2]
@@ -70,6 +71,11 @@ DYNAMODB_ACTIONS = [
     "dynamodb:UpdateItem",
 ]
 
+BEDROCK_ACTIONS = [
+    "bedrock:InvokeModel",
+    "bedrock:InvokeModelWithResponseStream",
+]
+
 
 def _build_policy_document(table_name: str, region: str, account_id: str) -> dict:
     return {
@@ -79,6 +85,26 @@ def _build_policy_document(table_name: str, region: str, account_id: str) -> dic
                 "Effect": "Allow",
                 "Action": DYNAMODB_ACTIONS,
                 "Resource": f"arn:aws:dynamodb:{region}:{account_id}:table/{table_name}",
+            }
+        ],
+    }
+
+
+def _build_bedrock_policy_document(account_id: str) -> dict:
+    # Wildcarded on region and model so we don't have to re-run this script
+    # every time we swap models or try a new cross-region inference profile.
+    # Cross-region profiles (e.g. "us." prefix) require permission on both the
+    # profile ARN and the foundation-model ARN in each region they route to.
+    return {
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Effect": "Allow",
+                "Action": BEDROCK_ACTIONS,
+                "Resource": [
+                    f"arn:aws:bedrock:*:{account_id}:inference-profile/*",
+                    "arn:aws:bedrock:*::foundation-model/*",
+                ],
             }
         ],
     }
@@ -100,7 +126,8 @@ def setup() -> None:
         iam.tag_user(UserName=IAM_USER_NAME, Tags=user_tags)
         print(f"[setup] user already exists, refreshed tags: {IAM_USER_NAME}")
 
-    # 2. Inline policy — put_user_policy is upsert, scoped to the one table.
+    # 2. Inline policies — put_user_policy is upsert. We keep DynamoDB and
+    # Bedrock as two separate policies for clear separation of concerns.
     policy_doc = _build_policy_document(table_name, region, account_id)
     iam.put_user_policy(
         UserName=IAM_USER_NAME,
@@ -111,6 +138,14 @@ def setup() -> None:
         f"[setup] put inline policy {INLINE_POLICY_NAME!r} "
         f"for table {table_name!r} in {region}"
     )
+
+    bedrock_policy_doc = _build_bedrock_policy_document(account_id)
+    iam.put_user_policy(
+        UserName=IAM_USER_NAME,
+        PolicyName=INLINE_POLICY_NAME_BEDROCK,
+        PolicyDocument=json.dumps(bedrock_policy_doc),
+    )
+    print(f"[setup] put inline policy {INLINE_POLICY_NAME_BEDROCK!r}")
 
     # 3. Access key — secrets are only returned at creation time, so the only
     # way to keep the local .env in lockstep with AWS is to delete every
@@ -151,14 +186,13 @@ def teardown() -> None:
     except iam.exceptions.NoSuchEntityException:
         print("[teardown] user absent, skipping access-key cleanup")
 
-    # 2. Inline policy.
-    try:
-        iam.delete_user_policy(
-            UserName=IAM_USER_NAME, PolicyName=INLINE_POLICY_NAME
-        )
-        print(f"[teardown] deleted inline policy: {INLINE_POLICY_NAME}")
-    except iam.exceptions.NoSuchEntityException:
-        print(f"[teardown] inline policy {INLINE_POLICY_NAME!r} already absent")
+    # 2. Inline policies.
+    for policy_name in (INLINE_POLICY_NAME, INLINE_POLICY_NAME_BEDROCK):
+        try:
+            iam.delete_user_policy(UserName=IAM_USER_NAME, PolicyName=policy_name)
+            print(f"[teardown] deleted inline policy: {policy_name}")
+        except iam.exceptions.NoSuchEntityException:
+            print(f"[teardown] inline policy {policy_name!r} already absent")
 
     # 3. User.
     try:
